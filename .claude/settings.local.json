@@ -3,7 +3,9 @@
     "allow": [
       "Read(//Users/vishnuknehru/Documents/my-projects/**)",
       "Bash(npx create-next-app@latest trackaboo --typescript --tailwind --app --src-dir --import-alias \"@/*\" --no-eslint --no-turbopack --yes)",
-      "Bash(export PATH=\"$HOME/.nvm/versions/node/v24.14.0/bin:$PATH\")"
+      "Bash(export PATH=\"$HOME/.nvm/versions/node/v24.14.0/bin:$PATH\")",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init --defaults --yes)"
     ]
   }
 }
