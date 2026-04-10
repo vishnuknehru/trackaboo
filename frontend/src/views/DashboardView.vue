@@ -16,10 +16,13 @@ const { data: metrics, isPending } = useMetrics(computed(() => monthStore.month)
 </script>
 
 <template>
-  <div class="max-w-5xl mx-auto px-6 py-8">
+  <div class="max-w-6xl mx-auto px-6 py-8">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Your financial overview at a glance</p>
+      </div>
       <MonthSelector v-model="month" />
     </div>
 
@@ -52,18 +55,24 @@ const { data: metrics, isPending } = useMetrics(computed(() => monthStore.month)
     />
 
     <!-- Quick links -->
-    <div class="mt-6 flex gap-4">
+    <div class="mt-6 flex gap-3">
       <RouterLink
-        :to="`/inflows?month=${monthStore.month}`"
-        class="text-sm text-blue-600 hover:underline"
+        :to="`/expense/inflows?month=${monthStore.month}`"
+        class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
       >
-        View Inflows &rarr;
+        View Inflows
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
       </RouterLink>
       <RouterLink
-        :to="`/outflows?month=${monthStore.month}`"
-        class="text-sm text-blue-600 hover:underline"
+        :to="`/expense/outflows?month=${monthStore.month}`"
+        class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
       >
-        View Outflows &rarr;
+        View Outflows
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
       </RouterLink>
     </div>
   </div>

@@ -21,25 +21,29 @@ function next() {
 </script>
 
 <template>
-  <div class="flex items-center gap-4">
+  <div class="flex items-center bg-white border border-gray-200 rounded-button shadow-sm px-1 py-1 gap-1">
     <button
       type="button"
-      class="p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+      class="p-1.5 rounded text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
       aria-label="Previous month"
       @click="prev"
     >
-      &#8249;
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
     </button>
-    <span class="text-base font-semibold text-gray-900 min-w-36 text-center">
+    <span class="text-sm font-semibold text-gray-800 min-w-32 text-center px-1">
       {{ formatMonth(modelValue) }}
     </span>
     <button
       type="button"
-      class="p-2 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+      class="p-1.5 rounded text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
       aria-label="Next month"
       @click="next"
     >
-      &#8250;
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
     </button>
   </div>
 </template>

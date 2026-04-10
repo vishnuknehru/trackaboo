@@ -45,15 +45,15 @@ const chartOptions = {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <h3 class="text-base font-semibold text-gray-900 mb-4">Spending by Category</h3>
+  <div class="bg-white rounded-card shadow-card p-6">
+    <h3 class="text-base font-semibold text-gray-900 mb-5">Spending by Category</h3>
 
     <div v-if="isLoading" class="flex items-center justify-center py-12">
       <LoadingSpinner size="lg" />
     </div>
 
     <div v-else-if="breakdown.length === 0" class="flex items-center justify-center py-12">
-      <p class="text-sm text-gray-500">No spending data for this month.</p>
+      <p class="text-sm text-gray-400">No spending data for this month.</p>
     </div>
 
     <div v-else>
@@ -61,22 +61,22 @@ const chartOptions = {
         <Doughnut :data="chartData" :options="chartOptions" />
       </div>
 
-      <ul class="space-y-2">
+      <ul class="space-y-1">
         <li
           v-for="item in breakdown"
           :key="item.categoryId"
-          class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
+          class="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors -mx-3"
         >
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2.5">
             <span
-              class="inline-block h-3 w-3 rounded-full flex-shrink-0"
+              class="inline-block h-3.5 w-3.5 rounded-full flex-shrink-0 ring-2 ring-white"
               :style="{ backgroundColor: item.color ?? '#94a3b8' }"
             />
             <span class="text-sm text-gray-700">{{ item.categoryName }}</span>
           </div>
           <div class="flex items-center gap-3 text-sm">
-            <span class="text-gray-500">{{ formatPercentage(item.percentage) }}</span>
-            <span class="font-medium text-gray-900">{{ formatCurrency(item.amount) }}</span>
+            <span class="text-gray-400">{{ formatPercentage(item.percentage) }}</span>
+            <span class="font-semibold text-gray-900">{{ formatCurrency(item.amount) }}</span>
           </div>
         </li>
       </ul>

@@ -9,6 +9,24 @@
             "command": "bash -c 'INPUT=$(echo \"$CLAUDE_TOOL_INPUT\" 2>/dev/null); if echo \"$INPUT\" | grep -qE \"rm -rf /|DROP TABLE|DELETE FROM [a-z_]+ WHERE 1=1\"; then echo \"[SAFETY] Destructive command detected. Please confirm with the user before proceeding.\"; exit 1; fi; exit 0'"
           }
         ]
+      },
+      {
+        "matcher": "Read|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // \"\"' | grep -qE '\\.env(\\.|$)' && echo '{\"continue\":false,\"stopReason\":\"[SAFETY] .env files are protected — reading/writing not allowed\"}' || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command // \"\"' | grep -qE '\\.env(\\.|$| |'\"'\"'|\")' && echo '{\"continue\":false,\"stopReason\":\"[SAFETY] .env files are protected — access via Bash not allowed\"}' || true"
+          }
+        ]
       }
     ]
   }

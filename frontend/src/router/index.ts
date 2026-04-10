@@ -13,21 +13,26 @@ const router = createRouter({
       name: 'dashboard',
       component: DashboardView,
     },
+    // New paths
     {
-      path: '/inflows',
+      path: '/expense/inflows',
       name: 'inflows',
       component: () => import('@/views/InflowView.vue'),
     },
     {
-      path: '/outflows',
+      path: '/expense/outflows',
       name: 'outflows',
       component: () => import('@/views/OutflowView.vue'),
     },
     {
-      path: '/categories',
+      path: '/settings/categories',
       name: 'categories',
       component: () => import('@/views/CategoriesView.vue'),
     },
+    // Legacy redirects (backward compat)
+    { path: '/inflows', redirect: '/expense/inflows' },
+    { path: '/outflows', redirect: '/expense/outflows' },
+    { path: '/categories', redirect: '/settings/categories' },
   ],
 })
 
