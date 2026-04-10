@@ -58,14 +58,17 @@ async function onDeleted() {
 </script>
 
 <template>
-  <div class="max-w-5xl mx-auto px-6 py-8">
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Outflows</h1>
-      <div class="flex items-center gap-4">
+  <div class="max-w-6xl mx-auto px-6 py-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Outflows</h1>
+        <p class="text-sm text-gray-500 mt-0.5">Track your expenses and spending</p>
+      </div>
+      <div class="flex items-center gap-3">
         <MonthSelector v-model="month" />
         <button
           type="button"
-          class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+          class="px-4 py-2.5 bg-primary-600 text-white text-sm font-medium rounded-button hover:bg-primary-700 transition-colors"
           @click="openCreate"
         >
           + Add Outflow

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { Inflow } from '@/types/api'
 import { formatCurrency, formatDate } from '@/lib/formatters'
 import { apiClient } from '@/lib/api/client'
 import LoadingSpinner from '@/components/shared/LoadingSpinner.vue'
-import { ref } from 'vue'
 
 interface Props {
   inflows: Inflow[]
@@ -18,10 +18,11 @@ const emit = defineEmits<{
 }>()
 
 const deletingId = ref<number | null>(null)
+const deleteConfirmId = ref<number | null>(null)
 
-async function handleDelete(inflow: Inflow) {
-  if (!confirm(`Delete inflow "${inflow.source}"?`)) return
+async function confirmDelete(inflow: Inflow) {
   deletingId.value = inflow.id
+  deleteConfirmId.value = null
   try {
     await apiClient.delete(`/inflows/${inflow.id}`)
     emit('deleted')
@@ -32,57 +33,73 @@ async function handleDelete(inflow: Inflow) {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+  <div class="bg-white rounded-card shadow-card overflow-hidden">
     <div v-if="isLoading" class="flex items-center justify-center py-12">
       <LoadingSpinner size="lg" />
     </div>
 
     <table v-else class="w-full text-sm">
-      <thead class="bg-gray-50 border-b border-gray-200">
+      <thead class="bg-gray-50 border-b border-gray-100">
         <tr>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Date
-          </th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Source
-          </th>
-          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Description
-          </th>
-          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Amount
-          </th>
-          <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Actions
-          </th>
+          <th class="px-5 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+          <th class="px-5 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+          <th class="px-5 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+          <th class="px-5 py-3.5 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+          <th class="px-5 py-3.5 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-gray-100">
-        <tr v-for="inflow in inflows" :key="inflow.id" class="hover:bg-gray-50">
-          <td class="px-4 py-3 text-gray-600 whitespace-nowrap">
+      <tbody class="divide-y divide-gray-50">
+        <tr
+          v-for="inflow in inflows"
+          :key="inflow.id"
+          class="hover:bg-primary-50/30 transition-colors even:bg-gray-50/50"
+        >
+          <td class="px-5 py-4 text-gray-500 whitespace-nowrap text-xs">
             {{ formatDate(inflow.date) }}
           </td>
-          <td class="px-4 py-3 font-medium text-gray-900">{{ inflow.source }}</td>
-          <td class="px-4 py-3 text-gray-500">{{ inflow.description ?? '—' }}</td>
-          <td class="px-4 py-3 text-right font-semibold text-emerald-600 whitespace-nowrap">
+          <td class="px-5 py-4 font-medium text-gray-900">{{ inflow.source }}</td>
+          <td class="px-5 py-4 text-gray-400 text-xs">{{ inflow.description ?? '—' }}</td>
+          <td class="px-5 py-4 text-right font-bold text-emerald-600 whitespace-nowrap">
             {{ formatCurrency(inflow.amount) }}
           </td>
-          <td class="px-4 py-3 text-right whitespace-nowrap">
-            <button
-              type="button"
-              class="text-blue-600 hover:text-blue-800 text-xs font-medium mr-3"
-              @click="emit('edit', inflow)"
-            >
-              Edit
-            </button>
-            <button
-              type="button"
-              class="text-red-500 hover:text-red-700 text-xs font-medium"
-              :disabled="deletingId === inflow.id"
-              @click="handleDelete(inflow)"
-            >
-              {{ deletingId === inflow.id ? 'Deleting…' : 'Delete' }}
-            </button>
+          <td class="px-5 py-4 text-right whitespace-nowrap">
+            <div class="flex items-center justify-end gap-1">
+              <button
+                type="button"
+                class="px-2.5 py-1 text-xs font-medium text-gray-600 rounded hover:bg-gray-100 transition-colors"
+                @click="emit('edit', inflow)"
+              >
+                Edit
+              </button>
+
+              <!-- Inline delete confirm -->
+              <template v-if="deleteConfirmId === inflow.id">
+                <span class="text-xs text-gray-400">Sure?</span>
+                <button
+                  type="button"
+                  class="px-2.5 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 transition-colors"
+                  :disabled="deletingId === inflow.id"
+                  @click="confirmDelete(inflow)"
+                >
+                  {{ deletingId === inflow.id ? '…' : 'Yes' }}
+                </button>
+                <button
+                  type="button"
+                  class="px-2.5 py-1 text-xs font-medium text-gray-600 rounded hover:bg-gray-100 transition-colors"
+                  @click="deleteConfirmId = null"
+                >
+                  No
+                </button>
+              </template>
+              <button
+                v-else
+                type="button"
+                class="px-2.5 py-1 text-xs font-medium text-red-500 rounded hover:bg-red-50 transition-colors"
+                @click="deleteConfirmId = inflow.id"
+              >
+                Delete
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
